@@ -2,11 +2,11 @@
   "name": "todo-list-server",
   "version": "1.0.0",
   "description": "TypeScript REST API server for To-Do List Mobile Application",
-  "main": "dist/server.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "start": "node dist/server.js",
-    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
+    "start": "node dist/index.js",
+    "dev": "nodemon --watch 'src/**/*.ts' --watch 'index.ts' --exec 'ts-node' index.ts",
     "seed": "ts-node src/utils/seed.ts"
   },
   "keywords": [],

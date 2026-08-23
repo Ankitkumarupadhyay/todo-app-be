@@ -3,9 +3,9 @@ dotenv.config();
 
 import express, { Express, Request, Response } from 'express';
 import cors from 'cors';
-import connectDB from './config/db';
-import taskRoutes from './routes/taskRoutes';
-import { errorHandler } from './middleware/errorHandler';
+import connectDB from './src/config/db';
+import taskRoutes from './src/routes/taskRoutes';
+import { errorHandler } from './src/middleware/errorHandler';
 
 const app: Express = express();
 
@@ -34,7 +34,16 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Health Check Endpoint
+// Root Health Check Endpoint for Vercel
+app.get('/', (req: Request, res: Response) => {
+  res.status(200).json({
+    status: 'ok',
+    message: 'To-Do List REST API is active and running',
+    timestamp: new Date().toISOString(),
+  });
+});
+
+// API Health Check Endpoint
 app.get('/api/health', (req: Request, res: Response) => {
   res.status(200).json({
     status: 'ok',
@@ -59,8 +68,10 @@ app.use(errorHandler);
 
 const PORT: number | string = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`TypeScript Express Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production' || require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`TypeScript Express Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+  });
+}
 
 export default app;
